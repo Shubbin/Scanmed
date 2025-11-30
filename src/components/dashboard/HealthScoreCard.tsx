@@ -19,9 +19,8 @@ export function HealthScoreCard({
   className,
 }: HealthScoreCardProps) {
   const getScoreStatus = (score: number) => {
-    if (score >= 80) return { label: "Excellent", color: "text-success" };
-    if (score >= 60) return { label: "Good", color: "text-success" };
-    if (score >= 40) return { label: "Needs Attention", color: "text-warning" };
+    if (score >= 70) return { label: "Good", color: "text-success" };
+    if (score >= 40) return { label: "Moderate", color: "text-warning" };
     return { label: "Critical", color: "text-destructive" };
   };
 
@@ -52,7 +51,7 @@ export function HealthScoreCard({
           </div>
         </div>
 
-        {/* Right side - Health Score */}
+        {/* Right side - Overall Health Score */}
         <div className="flex items-center gap-4 lg:border-l lg:border-border lg:pl-8">
           <div className="relative">
             <svg className="w-24 h-24 transform -rotate-90">
@@ -84,12 +83,12 @@ export function HealthScoreCard({
             </div>
           </div>
           <div>
-            <p className="text-sm text-muted-foreground">Health Score</p>
+            <p className="text-sm text-muted-foreground">Overall Health Score</p>
             <p className={cn("text-lg font-semibold", status.color)}>
               {status.label}
             </p>
             <p className="text-xs text-muted-foreground mt-1">
-              Based on {totalScans} scans
+              Based on last scans
             </p>
           </div>
         </div>
