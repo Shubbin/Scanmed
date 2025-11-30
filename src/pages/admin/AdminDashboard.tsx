@@ -1,7 +1,8 @@
-import { Users, Scan, MessageSquare, FileText } from "lucide-react";
+import { Users, Scan, MessageSquare, Eye, Smile, User } from "lucide-react";
 import { AdminLayout } from "@/components/layout/AdminLayout";
 import { StatCard } from "@/components/admin/StatCard";
 import { AnalyticsCharts } from "@/components/admin/AnalyticsCharts";
+import { ScanResultCard } from "@/components/dashboard/ScanResultCard";
 
 const AdminDashboard = () => {
   const stats = [
@@ -13,27 +14,34 @@ const AdminDashboard = () => {
       icon: Users,
     },
     {
-      title: "Total Scans",
-      value: "15,432",
+      title: "Eye Scans",
+      value: "5,432",
       change: "+8% from last month",
       changeType: "positive" as const,
-      icon: Scan,
+      icon: Eye,
     },
     {
-      title: "Active Chats",
-      value: "342",
-      change: "+23% from last month",
+      title: "Teeth Scans",
+      value: "4,891",
+      change: "+15% from last month",
       changeType: "positive" as const,
-      icon: MessageSquare,
+      icon: Smile,
     },
     {
-      title: "Reports Generated",
-      value: "12,891",
+      title: "Skin Scans",
+      value: "3,209",
       change: "+5% from last month",
       changeType: "positive" as const,
-      icon: FileText,
+      icon: User,
     },
   ];
+
+  // Platform-wide scan health averages
+  const platformScans = {
+    eye: { score: 78, updatedAgo: "Real-time" },
+    teeth: { score: 72, updatedAgo: "Real-time" },
+    skin: { score: 65, updatedAgo: "Real-time" },
+  };
 
   return (
     <AdminLayout>
@@ -50,6 +58,28 @@ const AdminDashboard = () => {
           {stats.map((stat) => (
             <StatCard key={stat.title} {...stat} />
           ))}
+        </div>
+
+        {/* Platform Health Scores */}
+        <div>
+          <h2 className="text-lg font-semibold text-foreground mb-4">Platform Health Averages</h2>
+          <div className="grid md:grid-cols-3 gap-4">
+            <ScanResultCard
+              title="Eye Scan Average"
+              score={platformScans.eye.score}
+              updatedAgo={platformScans.eye.updatedAgo}
+            />
+            <ScanResultCard
+              title="Teeth Scan Average"
+              score={platformScans.teeth.score}
+              updatedAgo={platformScans.teeth.updatedAgo}
+            />
+            <ScanResultCard
+              title="Skin Scan Average"
+              score={platformScans.skin.score}
+              updatedAgo={platformScans.skin.updatedAgo}
+            />
+          </div>
         </div>
 
         {/* Analytics Charts */}

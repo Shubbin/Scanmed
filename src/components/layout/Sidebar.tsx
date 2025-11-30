@@ -1,4 +1,4 @@
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { 
   LayoutDashboard, 
   Scan, 
@@ -6,7 +6,11 @@ import {
   Clock, 
   ChevronRight,
   Menu,
-  X
+  X,
+  Pill,
+  BookOpen,
+  Settings,
+  LogOut
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
@@ -16,6 +20,9 @@ const navItems = [
   { name: "Scan", path: "/scan", icon: Scan },
   { name: "Chat", path: "/chat", icon: MessageCircle },
   { name: "Recent Chats", path: "/recent-chats", icon: Clock },
+  { name: "Med Buddy", path: "/med-buddy", icon: Pill },
+  { name: "Health Blog", path: "/health-blog", icon: BookOpen },
+  { name: "Settings", path: "/settings", icon: Settings },
 ];
 
 interface SidebarProps {
@@ -100,8 +107,12 @@ export function Sidebar({ className }: SidebarProps) {
         </nav>
 
         {/* User profile */}
-        <div className="p-4 border-t border-sidebar-border">
-          <button className="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-sidebar-accent/50 transition-colors">
+        <div className="p-4 border-t border-sidebar-border space-y-2">
+          <NavLink
+            to="/settings"
+            onClick={() => setMobileOpen(false)}
+            className="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-sidebar-accent/50 transition-colors"
+          >
             <div className="w-10 h-10 rounded-full gradient-medical flex items-center justify-center text-primary-foreground font-semibold text-sm">
               {user.initials}
             </div>
@@ -110,6 +121,17 @@ export function Sidebar({ className }: SidebarProps) {
               <p className="text-xs text-muted-foreground">{user.username}</p>
             </div>
             <ChevronRight className="w-4 h-4 text-muted-foreground" />
+          </NavLink>
+          <button
+            onClick={() => {
+              setMobileOpen(false);
+              // Navigate to auth page for logout
+              window.location.href = "/auth";
+            }}
+            className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-destructive hover:bg-destructive/10 transition-colors"
+          >
+            <LogOut className="w-5 h-5" />
+            Logout
           </button>
         </div>
       </aside>

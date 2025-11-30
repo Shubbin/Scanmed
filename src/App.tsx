@@ -9,11 +9,11 @@ import Chat from "./pages/Chat";
 import RecentChats from "./pages/RecentChats";
 import MedBuddy from "./pages/MedBuddy";
 import HealthBlog from "./pages/HealthBlog";
+import Settings from "./pages/Settings";
 import Auth from "./pages/Auth";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminUsers from "./pages/admin/AdminUsers";
 import AdminAnalytics from "./pages/admin/AdminAnalytics";
-import AdminReports from "./pages/admin/AdminReports";
 import AdminChats from "./pages/admin/AdminChats";
 import AdminSettings from "./pages/admin/AdminSettings";
 import NotFound from "./pages/NotFound";
@@ -37,12 +37,12 @@ const App = () => (
           <Route path="/recent-chats" element={<RecentChats />} />
           <Route path="/med-buddy" element={<MedBuddy />} />
           <Route path="/health-blog" element={<HealthBlog />} />
+          <Route path="/settings" element={<Settings />} />
           
           {/* Admin Routes */}
           <Route path="/admin" element={<AdminDashboard />} />
           <Route path="/admin/users" element={<AdminUsers />} />
           <Route path="/admin/analytics" element={<AdminAnalytics />} />
-          <Route path="/admin/reports" element={<AdminReports />} />
           <Route path="/admin/chats" element={<AdminChats />} />
           <Route path="/admin/settings" element={<AdminSettings />} />
           
