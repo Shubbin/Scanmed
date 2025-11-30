@@ -3,13 +3,13 @@ import {
   LayoutDashboard, 
   Users, 
   BarChart3, 
-  FileText, 
   MessageSquare, 
   Settings,
   ChevronRight,
   Shield,
   Menu,
-  X
+  X,
+  LogOut
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
@@ -18,7 +18,6 @@ const navItems = [
   { name: "Admin Dashboard", path: "/admin", icon: LayoutDashboard },
   { name: "Users", path: "/admin/users", icon: Users },
   { name: "Scan Analytics", path: "/admin/analytics", icon: BarChart3 },
-  { name: "Reports", path: "/admin/reports", icon: FileText },
   { name: "Chat Monitoring", path: "/admin/chats", icon: MessageSquare },
   { name: "Settings", path: "/admin/settings", icon: Settings },
 ];
@@ -108,7 +107,7 @@ export function AdminSidebar({ className }: AdminSidebarProps) {
         </nav>
 
         {/* Admin profile */}
-        <div className="p-4 border-t border-muted-foreground/20">
+        <div className="p-4 border-t border-muted-foreground/20 space-y-2">
           <button className="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-muted-foreground/10 transition-colors">
             <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-primary-foreground font-semibold text-sm">
               {admin.initials}
@@ -118,6 +117,16 @@ export function AdminSidebar({ className }: AdminSidebarProps) {
               <p className="text-xs text-muted-foreground">{admin.role}</p>
             </div>
             <ChevronRight className="w-4 h-4 text-muted-foreground" />
+          </button>
+          <button
+            onClick={() => {
+              setMobileOpen(false);
+              window.location.href = "/auth";
+            }}
+            className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-destructive hover:bg-destructive/20 transition-colors"
+          >
+            <LogOut className="w-5 h-5" />
+            Logout
           </button>
         </div>
       </aside>

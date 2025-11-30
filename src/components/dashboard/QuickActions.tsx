@@ -1,4 +1,4 @@
-import { Scan, MessageCircle, FileText } from "lucide-react";
+import { Scan, MessageCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { cn } from "@/lib/utils";
 
@@ -12,7 +12,6 @@ export function QuickActions({ className }: QuickActionsProps) {
   const actions = [
     { label: "Start New Scan", icon: Scan, path: "/scan" },
     { label: "Open Chat", icon: MessageCircle, path: "/chat" },
-    { label: "View Reports", icon: FileText, path: "/reports" },
   ];
 
   return (

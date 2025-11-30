@@ -1,14 +1,9 @@
-import { Eye, Smile, User } from "lucide-react";
-import { useNavigate } from "react-router-dom";
 import { MainLayout } from "@/components/layout/MainLayout";
 import { HealthScoreCard } from "@/components/dashboard/HealthScoreCard";
-import { ScanCard } from "@/components/dashboard/ScanCard";
 import { ScanResultCard } from "@/components/dashboard/ScanResultCard";
 import { QuickActions } from "@/components/dashboard/QuickActions";
 
 const Index = () => {
-  const navigate = useNavigate();
-
   // Sample scan data
   const scanResults = {
     eye: { score: 30, updatedAgo: "2 hours ago" },
@@ -21,27 +16,6 @@ const Index = () => {
   const overallScore = completedScans.length > 0
     ? Math.round(completedScans.reduce((acc, s) => acc + s.score, 0) / completedScans.length)
     : 0;
-
-  const scanTypes = [
-    {
-      title: "Eye Scan",
-      description: "Scan your eyes for irritation, redness, or early infections.",
-      icon: Eye,
-      buttonText: "Start Eye Scan",
-    },
-    {
-      title: "Teeth Scan",
-      description: "Analyze your teeth for dental health insights.",
-      icon: Smile,
-      buttonText: "Start Teeth Scan",
-    },
-    {
-      title: "Face/Skin Scan",
-      description: "Detect skin issues or inflammation.",
-      icon: User,
-      buttonText: "Start Skin Scan",
-    },
-  ];
 
   return (
     <MainLayout>
@@ -60,12 +34,6 @@ const Index = () => {
           totalScans={12}
           healthScore={overallScore}
         />
-
-        {/* Quick Actions */}
-        <div>
-          <h2 className="text-lg font-semibold text-foreground mb-4">Quick Actions</h2>
-          <QuickActions />
-        </div>
 
         {/* Recent Scan Results */}
         <div>
@@ -89,18 +57,10 @@ const Index = () => {
           </div>
         </div>
 
-        {/* Scan Cards */}
+        {/* Quick Actions */}
         <div>
-          <h2 className="text-lg font-semibold text-foreground mb-4">Start a Scan</h2>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {scanTypes.map((scan) => (
-              <ScanCard
-                key={scan.title}
-                {...scan}
-                onClick={() => navigate("/scan")}
-              />
-            ))}
-          </div>
+          <h2 className="text-lg font-semibold text-foreground mb-4">Quick Actions</h2>
+          <QuickActions />
         </div>
       </div>
     </MainLayout>
