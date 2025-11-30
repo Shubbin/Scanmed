@@ -3,11 +3,24 @@ import { useNavigate } from "react-router-dom";
 import { MainLayout } from "@/components/layout/MainLayout";
 import { HealthScoreCard } from "@/components/dashboard/HealthScoreCard";
 import { ScanCard } from "@/components/dashboard/ScanCard";
-import { RecentInsights } from "@/components/dashboard/RecentInsights";
+import { ScanResultCard } from "@/components/dashboard/ScanResultCard";
 import { QuickActions } from "@/components/dashboard/QuickActions";
 
 const Index = () => {
   const navigate = useNavigate();
+
+  // Sample scan data
+  const scanResults = {
+    eye: { score: 30, updatedAgo: "2 hours ago" },
+    teeth: { score: 40, updatedAgo: "5 hours ago" },
+    skin: { score: 0, updatedAgo: "Not scanned yet" },
+  };
+
+  // Calculate overall health score (average of completed scans)
+  const completedScans = [scanResults.eye, scanResults.teeth].filter(s => s.score > 0);
+  const overallScore = completedScans.length > 0
+    ? Math.round(completedScans.reduce((acc, s) => acc + s.score, 0) / completedScans.length)
+    : 0;
 
   const scanTypes = [
     {
@@ -45,13 +58,35 @@ const Index = () => {
           initials="MO"
           lastScanDate="Nov 28, 2024"
           totalScans={12}
-          healthScore={77}
+          healthScore={overallScore}
         />
 
         {/* Quick Actions */}
         <div>
           <h2 className="text-lg font-semibold text-foreground mb-4">Quick Actions</h2>
           <QuickActions />
+        </div>
+
+        {/* Recent Scan Results */}
+        <div>
+          <h2 className="text-lg font-semibold text-foreground mb-4">Recent Scan Results</h2>
+          <div className="grid md:grid-cols-3 gap-4">
+            <ScanResultCard
+              title="Eye Scan"
+              score={scanResults.eye.score}
+              updatedAgo={scanResults.eye.updatedAgo}
+            />
+            <ScanResultCard
+              title="Teeth Scan"
+              score={scanResults.teeth.score}
+              updatedAgo={scanResults.teeth.updatedAgo}
+            />
+            <ScanResultCard
+              title="Face / Skin Scan"
+              score={scanResults.skin.score}
+              updatedAgo={scanResults.skin.updatedAgo}
+            />
+          </div>
         </div>
 
         {/* Scan Cards */}
@@ -66,22 +101,6 @@ const Index = () => {
               />
             ))}
           </div>
-        </div>
-
-        {/* Recent Insights */}
-        <div className="grid lg:grid-cols-2 gap-6">
-          <RecentInsights
-            scanType="Eye Scan"
-            resultSummary="Your recent eye scan shows healthy results with minor signs of digital strain. Consider the 20-20-20 rule for eye rest."
-            percentage={82}
-            onViewReport={() => navigate("/reports")}
-          />
-          <RecentInsights
-            scanType="Teeth Scan"
-            resultSummary="Dental analysis indicates good overall health. Light plaque buildup detected on back molars. Regular flossing recommended."
-            percentage={71}
-            onViewReport={() => navigate("/reports")}
-          />
         </div>
       </div>
     </MainLayout>

@@ -7,7 +7,9 @@ import Index from "./pages/Index";
 import Scan from "./pages/Scan";
 import Chat from "./pages/Chat";
 import RecentChats from "./pages/RecentChats";
-import Reports from "./pages/Reports";
+import MedBuddy from "./pages/MedBuddy";
+import HealthBlog from "./pages/HealthBlog";
+import Auth from "./pages/Auth";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminUsers from "./pages/admin/AdminUsers";
 import AdminAnalytics from "./pages/admin/AdminAnalytics";
@@ -25,12 +27,16 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <Routes>
+          {/* Auth Routes */}
+          <Route path="/auth" element={<Auth />} />
+          
           {/* User Routes */}
           <Route path="/" element={<Index />} />
           <Route path="/scan" element={<Scan />} />
           <Route path="/chat" element={<Chat />} />
           <Route path="/recent-chats" element={<RecentChats />} />
-          <Route path="/reports" element={<Reports />} />
+          <Route path="/med-buddy" element={<MedBuddy />} />
+          <Route path="/health-blog" element={<HealthBlog />} />
           
           {/* Admin Routes */}
           <Route path="/admin" element={<AdminDashboard />} />
