@@ -37,20 +37,25 @@ export function ScanResultCard({
   const status = getStatus(score);
 
   return (
-    <div className={cn("medical-card relative flex items-start gap-4", className)}>
-      <div className={cn("p-3 rounded-xl", getIconBg(score))}>
-        <Icon className="h-6 w-6" />
-      </div>
-      <div className="flex-1 min-w-0">
-        <div className="flex items-center justify-between mb-1">
-          <h3 className="text-sm font-semibold text-foreground">{title}</h3>
-          <span className={cn("text-xs px-2.5 py-1 rounded-full font-medium border", status.color)}>
-            {status.label}
-          </span>
+    <div className={cn("medical-card", className)}>
+      {/* Top row: Icon + Badge */}
+      <div className="flex items-center justify-between mb-3">
+        <div className={cn("p-2.5 rounded-xl", getIconBg(score))}>
+          <Icon className="h-5 w-5" />
         </div>
-        <p className={cn("text-3xl font-bold", getScoreColor(score))}>{score}%</p>
-        <p className="text-xs text-muted-foreground mt-1">Updated {updatedAgo}</p>
+        <span className={cn("text-xs px-2.5 py-1 rounded-full font-medium border", status.color)}>
+          {status.label}
+        </span>
       </div>
+      
+      {/* Title */}
+      <h3 className="text-sm font-medium text-muted-foreground mb-2">{title}</h3>
+      
+      {/* Score */}
+      <p className={cn("text-3xl font-bold mb-1", getScoreColor(score))}>{score}%</p>
+      
+      {/* Updated time */}
+      <p className="text-xs text-muted-foreground">Updated {updatedAgo}</p>
     </div>
   );
 }
