@@ -68,16 +68,19 @@ const AdminDashboard = () => {
               title="Eye Scan Average"
               score={platformScans.eye.score}
               updatedAgo={platformScans.eye.updatedAgo}
+              icon={Eye}
             />
             <ScanResultCard
               title="Teeth Scan Average"
               score={platformScans.teeth.score}
               updatedAgo={platformScans.teeth.updatedAgo}
+              icon={Smile}
             />
             <ScanResultCard
               title="Skin Scan Average"
               score={platformScans.skin.score}
               updatedAgo={platformScans.skin.updatedAgo}
+              icon={User}
             />
           </div>
         </div>
