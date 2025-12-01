@@ -2,6 +2,7 @@ import { MainLayout } from "@/components/layout/MainLayout";
 import { HealthScoreCard } from "@/components/dashboard/HealthScoreCard";
 import { ScanResultCard } from "@/components/dashboard/ScanResultCard";
 import { QuickActions } from "@/components/dashboard/QuickActions";
+import { Eye, Smile, User } from "lucide-react";
 
 const Index = () => {
   // Sample scan data
@@ -43,16 +44,19 @@ const Index = () => {
               title="Eye Scan"
               score={scanResults.eye.score}
               updatedAgo={scanResults.eye.updatedAgo}
+              icon={Eye}
             />
             <ScanResultCard
               title="Teeth Scan"
               score={scanResults.teeth.score}
               updatedAgo={scanResults.teeth.updatedAgo}
+              icon={Smile}
             />
             <ScanResultCard
               title="Face / Skin Scan"
               score={scanResults.skin.score}
               updatedAgo={scanResults.skin.updatedAgo}
+              icon={User}
             />
           </div>
         </div>
