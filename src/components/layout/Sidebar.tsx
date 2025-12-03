@@ -60,7 +60,7 @@ export function Sidebar({ className }: SidebarProps) {
       {/* Sidebar */}
       <aside
         className={cn(
-          "fixed lg:static inset-y-0 left-0 z-50 w-64 bg-sidebar border-r border-sidebar-border flex flex-col transition-transform duration-300",
+          "fixed inset-y-0 left-0 z-50 w-64 bg-sidebar border-r border-sidebar-border flex flex-col transition-transform duration-300 overflow-hidden",
           mobileOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0",
           className
         )}
@@ -109,7 +109,7 @@ export function Sidebar({ className }: SidebarProps) {
         {/* User profile */}
         <div className="p-4 border-t border-sidebar-border space-y-2">
           <NavLink
-            to="/settings"
+            to="/profile"
             onClick={() => setMobileOpen(false)}
             className="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-sidebar-accent/50 transition-colors"
           >
