@@ -10,6 +10,7 @@ import RecentChats from "./pages/RecentChats";
 import MedBuddy from "./pages/MedBuddy";
 import HealthBlog from "./pages/HealthBlog";
 import Settings from "./pages/Settings";
+import Profile from "./pages/Profile";
 import Auth from "./pages/Auth";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminUsers from "./pages/admin/AdminUsers";
@@ -38,6 +39,7 @@ const App = () => (
           <Route path="/med-buddy" element={<MedBuddy />} />
           <Route path="/health-blog" element={<HealthBlog />} />
           <Route path="/settings" element={<Settings />} />
+          <Route path="/profile" element={<Profile />} />
           
           {/* Admin Routes */}
           <Route path="/admin" element={<AdminDashboard />} />
