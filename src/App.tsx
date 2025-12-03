@@ -6,7 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import Scan from "./pages/Scan";
 import Chat from "./pages/Chat";
-import RecentChats from "./pages/RecentChats";
+import History from "./pages/History";
 import MedBuddy from "./pages/MedBuddy";
 import HealthBlog from "./pages/HealthBlog";
 import Settings from "./pages/Settings";
@@ -35,7 +35,7 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/scan" element={<Scan />} />
           <Route path="/chat" element={<Chat />} />
-          <Route path="/recent-chats" element={<RecentChats />} />
+          <Route path="/history" element={<History />} />
           <Route path="/med-buddy" element={<MedBuddy />} />
           <Route path="/health-blog" element={<HealthBlog />} />
           <Route path="/settings" element={<Settings />} />

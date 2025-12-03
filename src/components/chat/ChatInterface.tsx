@@ -1,7 +1,8 @@
 import { useState, useRef, useEffect } from "react";
-import { Send, Paperclip, Bot, User } from "lucide-react";
+import { Send, Paperclip, Bot, User, Mic, MicOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { toast } from "sonner";
 
 interface Message {
   id: string;
@@ -31,6 +32,7 @@ export function ChatInterface({ className }: ChatInterfaceProps) {
   ]);
   const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
+  const [isRecording, setIsRecording] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
@@ -72,8 +74,24 @@ export function ChatInterface({ className }: ChatInterfaceProps) {
     setInput(suggestion);
   };
 
+  const handleVoiceRecord = async () => {
+    if (isRecording) {
+      setIsRecording(false);
+      toast.success("Voice recording stopped");
+      return;
+    }
+
+    try {
+      await navigator.mediaDevices.getUserMedia({ audio: true });
+      setIsRecording(true);
+      toast.success("Recording... Click again to stop");
+    } catch {
+      toast.error("Microphone access denied");
+    }
+  };
+
   return (
-    <div className={cn("flex flex-col h-[calc(100vh-8rem)] bg-card rounded-xl border border-border", className)}>
+    <div className={cn("flex flex-col h-[calc(100vh-8rem)] bg-card rounded-2xl border border-border overflow-hidden", className)}>
       {/* Chat header */}
       <div className="flex items-center gap-3 p-4 border-b border-border">
         <div className="w-10 h-10 rounded-full gradient-medical flex items-center justify-center">
@@ -161,9 +179,22 @@ export function ChatInterface({ className }: ChatInterfaceProps) {
           <Button
             variant="ghost"
             size="icon"
-            className="text-muted-foreground hover:text-foreground"
+            className="text-muted-foreground hover:text-foreground shrink-0"
           >
             <Paperclip className="w-5 h-5" />
+          </Button>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={handleVoiceRecord}
+            className={cn(
+              "shrink-0 transition-colors",
+              isRecording 
+                ? "text-destructive bg-destructive/10 hover:bg-destructive/20" 
+                : "text-muted-foreground hover:text-foreground"
+            )}
+          >
+            {isRecording ? <MicOff className="w-5 h-5" /> : <Mic className="w-5 h-5" />}
           </Button>
           <input
             type="text"
@@ -171,12 +202,12 @@ export function ChatInterface({ className }: ChatInterfaceProps) {
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && handleSend()}
             placeholder="Type your message..."
-            className="flex-1 bg-muted rounded-lg px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/20"
+            className="flex-1 bg-muted rounded-xl px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/20"
           />
           <Button
             onClick={handleSend}
             disabled={!input.trim()}
-            className="gradient-medical text-primary-foreground"
+            className="gradient-medical text-primary-foreground shrink-0"
             size="icon"
           >
             <Send className="w-4 h-4" />
