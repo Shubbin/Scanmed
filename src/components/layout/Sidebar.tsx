@@ -19,7 +19,7 @@ const navItems = [
   { name: "Dashboard", path: "/", icon: LayoutDashboard },
   { name: "Scan", path: "/scan", icon: Scan },
   { name: "Chat", path: "/chat", icon: MessageCircle },
-  { name: "Recent Chats", path: "/recent-chats", icon: Clock },
+  { name: "History", path: "/history", icon: Clock },
   { name: "Med Buddy", path: "/med-buddy", icon: Pill },
   { name: "Health Blog", path: "/health-blog", icon: BookOpen },
   { name: "Settings", path: "/settings", icon: Settings },

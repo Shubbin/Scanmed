@@ -1,8 +1,9 @@
-import { useState } from "react";
-import { Eye, Smile, User, Camera, Upload, ArrowLeft } from "lucide-react";
+import { useState, useRef, useEffect } from "react";
+import { Eye, Smile, User, Camera, ArrowLeft, X } from "lucide-react";
 import { MainLayout } from "@/components/layout/MainLayout";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { toast } from "sonner";
 
 type ScanType = "eye" | "teeth" | "skin" | null;
 
@@ -48,91 +49,136 @@ const scanOptions = [
 const Scan = () => {
   const [selectedScan, setSelectedScan] = useState<ScanType>(null);
   const [isScanning, setIsScanning] = useState(false);
+  const [cameraActive, setCameraActive] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const streamRef = useRef<MediaStream | null>(null);
 
   const selectedOption = scanOptions.find((opt) => opt.id === selectedScan);
 
+  const startCamera = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ 
+        video: { facingMode: "user", width: 640, height: 480 } 
+      });
+      streamRef.current = stream;
+      if (videoRef.current) {
+        videoRef.current.srcObject = stream;
+      }
+      setCameraActive(true);
+    } catch {
+      toast.error("Unable to access camera. Please check permissions.");
+    }
+  };
+
+  const stopCamera = () => {
+    if (streamRef.current) {
+      streamRef.current.getTracks().forEach(track => track.stop());
+      streamRef.current = null;
+    }
+    setCameraActive(false);
+  };
+
   const handleStartScan = () => {
     setIsScanning(true);
+    toast.info("Analyzing your scan...");
     // Simulate scanning process
     setTimeout(() => {
       setIsScanning(false);
-      // Navigate to results or show results
+      stopCamera();
+      toast.success("Scan completed successfully!");
     }, 3000);
   };
+
+  const handleBack = () => {
+    stopCamera();
+    setSelectedScan(null);
+    setIsScanning(false);
+  };
+
+  useEffect(() => {
+    if (selectedScan && !cameraActive) {
+      startCamera();
+    }
+    return () => {
+      stopCamera();
+    };
+  }, [selectedScan]);
 
   if (selectedScan && selectedOption) {
     return (
       <MainLayout>
-        <div className="max-w-2xl mx-auto space-y-6">
+        <div className="max-w-xl mx-auto space-y-6">
           <Button
             variant="ghost"
-            onClick={() => setSelectedScan(null)}
+            onClick={handleBack}
             className="text-muted-foreground hover:text-foreground"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
             Back to Scan Selection
           </Button>
 
-          <div className="medical-card text-center">
-            <div className="w-16 h-16 rounded-xl bg-accent flex items-center justify-center mx-auto mb-4">
-              <selectedOption.icon className="w-8 h-8 text-primary" />
+          {/* Header */}
+          <div className="text-center">
+            <div className="w-14 h-14 rounded-2xl bg-accent flex items-center justify-center mx-auto mb-3">
+              <selectedOption.icon className="w-7 h-7 text-primary" />
             </div>
-            <h1 className="text-2xl font-bold text-foreground mb-2">
-              {selectedOption.title}
-            </h1>
-            <p className="text-muted-foreground">{selectedOption.description}</p>
+            <h1 className="text-xl font-bold text-foreground">{selectedOption.title}</h1>
+            <p className="text-sm text-muted-foreground mt-1">{selectedOption.description}</p>
           </div>
 
-          {/* Camera/Upload Area */}
-          <div className="medical-card">
-            <div
-              className={cn(
-                "aspect-video rounded-lg border-2 border-dashed border-border flex flex-col items-center justify-center bg-muted/50 transition-colors",
-                isScanning && "border-primary bg-accent"
-              )}
-            >
-              {isScanning ? (
-                <div className="text-center">
-                  <div className="w-16 h-16 rounded-full border-4 border-primary border-t-transparent animate-spin mx-auto mb-4" />
-                  <p className="text-foreground font-medium">Analyzing...</p>
-                  <p className="text-sm text-muted-foreground">Please wait while we process your scan</p>
-                </div>
-              ) : (
+          {/* Camera View */}
+          <div className="medical-card p-4">
+            <div className="relative aspect-[4/3] rounded-xl overflow-hidden bg-muted">
+              {cameraActive ? (
                 <>
-                  <Camera className="w-12 h-12 text-muted-foreground mb-4" />
-                  <p className="text-foreground font-medium mb-2">
-                    Ready to scan
-                  </p>
-                  <p className="text-sm text-muted-foreground mb-4">
-                    Position your camera and click scan to begin
-                  </p>
+                  <video
+                    ref={videoRef}
+                    autoPlay
+                    playsInline
+                    muted
+                    className="w-full h-full object-cover"
+                  />
+                  {isScanning && (
+                    <div className="absolute inset-0 bg-background/80 flex flex-col items-center justify-center">
+                      <div className="w-14 h-14 rounded-full border-4 border-primary border-t-transparent animate-spin mb-4" />
+                      <p className="text-foreground font-medium">Analyzing...</p>
+                      <p className="text-sm text-muted-foreground">Please hold still</p>
+                    </div>
+                  )}
+                  {!isScanning && (
+                    <button
+                      onClick={stopCamera}
+                      className="absolute top-3 right-3 p-2 rounded-full bg-background/80 hover:bg-background transition-colors"
+                    >
+                      <X className="w-4 h-4 text-foreground" />
+                    </button>
+                  )}
                 </>
+              ) : (
+                <div className="absolute inset-0 flex flex-col items-center justify-center">
+                  <Camera className="w-10 h-10 text-muted-foreground mb-3" />
+                  <p className="text-sm text-muted-foreground">Initializing camera...</p>
+                </div>
               )}
             </div>
 
-            <div className="flex gap-3 mt-4">
-              <Button
-                className="flex-1 gradient-medical text-primary-foreground"
-                onClick={handleStartScan}
-                disabled={isScanning}
-              >
-                <Camera className="w-4 h-4 mr-2" />
-                {isScanning ? "Scanning..." : "Start Scan"}
-              </Button>
-              <Button variant="outline" className="flex-1" disabled={isScanning}>
-                <Upload className="w-4 h-4 mr-2" />
-                Upload Image
-              </Button>
-            </div>
+            <Button
+              className="w-full gradient-medical text-primary-foreground mt-4"
+              onClick={handleStartScan}
+              disabled={isScanning || !cameraActive}
+            >
+              <Camera className="w-4 h-4 mr-2" />
+              {isScanning ? "Scanning..." : "Capture & Scan"}
+            </Button>
           </div>
 
           {/* Instructions */}
           <div className="medical-card">
-            <h3 className="font-semibold text-foreground mb-4">Scan Instructions</h3>
-            <ul className="space-y-3">
+            <h3 className="font-semibold text-foreground mb-3">Quick Tips</h3>
+            <ul className="space-y-2">
               {selectedOption.instructions.map((instruction, index) => (
                 <li key={index} className="flex items-start gap-3">
-                  <span className="w-6 h-6 rounded-full bg-accent text-primary text-sm font-medium flex items-center justify-center flex-shrink-0">
+                  <span className="w-5 h-5 rounded-full bg-accent text-primary text-xs font-medium flex items-center justify-center shrink-0 mt-0.5">
                     {index + 1}
                   </span>
                   <span className="text-sm text-muted-foreground">{instruction}</span>

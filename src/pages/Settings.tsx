@@ -9,7 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { toast } from "sonner";
 import { Bell, Palette, Shield, Database, AlertTriangle } from "lucide-react";
 
@@ -28,8 +28,27 @@ const Settings = () => {
     crashReports: true,
   });
 
-  const [theme, setTheme] = useState("system");
+  const [theme, setTheme] = useState(() => {
+    if (typeof window !== "undefined") {
+      return localStorage.getItem("theme") || "light";
+    }
+    return "light";
+  });
   const [language, setLanguage] = useState("english");
+
+  useEffect(() => {
+    const root = window.document.documentElement;
+    root.classList.remove("light", "dark");
+    
+    if (theme === "system") {
+      const systemTheme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      root.classList.add(systemTheme);
+    } else {
+      root.classList.add(theme);
+    }
+    
+    localStorage.setItem("theme", theme);
+  }, [theme]);
 
   const handleSave = () => {
     toast.success("Settings saved successfully!");
@@ -49,7 +68,7 @@ const Settings = () => {
 
   return (
     <MainLayout>
-      <div className="max-w-2xl mx-auto space-y-8 pb-8">
+      <div className="max-w-2xl mx-auto space-y-6 pb-8">
         <div>
           <h1 className="text-2xl font-bold text-foreground">Settings</h1>
           <p className="text-muted-foreground mt-1">
@@ -60,7 +79,7 @@ const Settings = () => {
         {/* Notifications */}
         <div className="medical-card">
           <div className="flex items-center gap-3 mb-6">
-            <div className="p-2 rounded-lg bg-primary/10">
+            <div className="p-2.5 rounded-xl bg-accent">
               <Bell className="h-5 w-5 text-primary" />
             </div>
             <div>
@@ -135,7 +154,7 @@ const Settings = () => {
         {/* Appearance */}
         <div className="medical-card">
           <div className="flex items-center gap-3 mb-6">
-            <div className="p-2 rounded-lg bg-primary/10">
+            <div className="p-2.5 rounded-xl bg-accent">
               <Palette className="h-5 w-5 text-primary" />
             </div>
             <div>
@@ -152,9 +171,9 @@ const Settings = () => {
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="system">System</SelectItem>
                   <SelectItem value="light">Light</SelectItem>
                   <SelectItem value="dark">Dark</SelectItem>
+                  <SelectItem value="system">System</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -178,7 +197,7 @@ const Settings = () => {
         {/* Privacy & Security */}
         <div className="medical-card">
           <div className="flex items-center gap-3 mb-6">
-            <div className="p-2 rounded-lg bg-primary/10">
+            <div className="p-2.5 rounded-xl bg-accent">
               <Shield className="h-5 w-5 text-primary" />
             </div>
             <div>
@@ -237,7 +256,7 @@ const Settings = () => {
         {/* Data Management */}
         <div className="medical-card">
           <div className="flex items-center gap-3 mb-6">
-            <div className="p-2 rounded-lg bg-primary/10">
+            <div className="p-2.5 rounded-xl bg-accent">
               <Database className="h-5 w-5 text-primary" />
             </div>
             <div>
@@ -268,7 +287,7 @@ const Settings = () => {
         {/* Danger Zone */}
         <div className="medical-card border-destructive/30">
           <div className="flex items-center gap-3 mb-6">
-            <div className="p-2 rounded-lg bg-destructive/10">
+            <div className="p-2.5 rounded-xl bg-destructive/10">
               <AlertTriangle className="h-5 w-5 text-destructive" />
             </div>
             <div>
@@ -289,7 +308,7 @@ const Settings = () => {
         {/* Save Button */}
         <div className="flex gap-3">
           <Button variant="outline">Cancel</Button>
-          <Button onClick={handleSave}>Save Changes</Button>
+          <Button onClick={handleSave} className="gradient-medical text-primary-foreground">Save Changes</Button>
         </div>
       </div>
     </MainLayout>
